@@ -101,9 +101,9 @@ Screenshot 2026-11-02 203002.png
 
 ### Mobile Application
 
-![Mobile Application Homepage](Screenshots/mobile-homepage.png)
+![Mobile Application Homepage](Screenshots/Screenshot 2026-11-02 203002.jpeg)
 
-![Mobile Adoption Page](Screenshots/mobile-adoption.png)
+![Mobile Adoption Page](Screenshots/Adoption.jpeg)
 
 ## Acknowledgements
 
