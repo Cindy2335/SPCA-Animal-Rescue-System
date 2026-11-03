@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: team08-admin-private
+    runtime: static
+    rootDir: web-app
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    autoDeployTrigger: commit
+    envVars:
+      - key: VITE_API_URL
+        value: https://team08-api.onrender.com
