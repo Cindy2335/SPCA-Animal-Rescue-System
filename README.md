@@ -94,14 +94,14 @@ It provided practical experience in full-stack development, mobile application d
 
 !Screenshot 2026-11-02 203139.png)
 
-![Animal Adoption Page]Screenshot 2026-11-02 202938.png
+![Animal Adoption Page](Screenshots/Screenshot 2026-11-02 202938.png)
 Screenshot 2026-11-02 203002.png
 
 ![Reporting Page](Screenshots/reports.png)
 
 ### Mobile Application
 
-![Mobile Application Homepage](Screenshots/Screenshot 2026-11-02 203002.jpeg)
+![Mobile Application Homepage](Screenshots/HomePage.jpeg)
 
 ![Mobile Adoption Page](Screenshots/Adoption.jpeg)
 
