@@ -1,0 +1,23 @@
+/backend/
+/docs/
+/package*.json
+/README*
+/.claude/
+node_modules/
+.expo/
+.expo-shared/
+mobile-app/.expo/
+mobile-app/.expo-shared/
+
+mobile-app/assets/animals/videos/15234803_4320_7680_24fps.mp4
+web-app/dist/
+
+# Local tooling, generated checks, and nested deployment worktrees
+/.venv/
+/api-deploy-worktree/
+/admin-deploy-worktree/
+/mobile-app/.eas-upload-check/
+/mobile-app/dist-eas-check/
+/mobile-app/current-screen.png
+*.log
+/s -ExecutionPolicy RemoteSigned*

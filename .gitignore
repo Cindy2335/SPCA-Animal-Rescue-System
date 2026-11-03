@@ -16,11 +16,22 @@ build/
 *.sqlite
 *.sqlite3
 *.log
+npm-debug.log*
 /Database/dev.pre-*.db
 /powerbi-data/*.csv
 /powerbi-data/export-summary.json
 
 # Local tooling
 .codex-*.log
+.expo/
+.expo-shared/
 .vscode/
 .idea/
+
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Google services credentials
+google-services.json
