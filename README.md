@@ -88,6 +88,23 @@ This project was developed as part of a university Informatics thrid year projec
 
 It provided practical experience in full-stack development, mobile application development, API integration, database management and collaborative software development.
 
+## Application Screenshots
+
+### Web Application
+
+!Screenshot 2026-11-02 203139.png)
+
+![Animal Adoption Page]Screenshot 2026-11-02 202938.png
+Screenshot 2026-11-02 203002.png
+
+![Reporting Page](Screenshots/reports.png)
+
+### Mobile Application
+
+![Mobile Application Homepage](Screenshots/mobile-homepage.png)
+
+![Mobile Adoption Page](Screenshots/mobile-adoption.png)
+
 ## Acknowledgements
 
 Developed as a university software engineering project with the aim of supporting animal rescue and adoption services.
