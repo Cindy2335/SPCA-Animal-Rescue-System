@@ -1,0 +1,239 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String                   @id @default(cuid())
+  email                String                   @unique
+  fullName             String
+  passwordHash         String
+  role                 String                   @default("USER")
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  strayReports         StrayAnimalReport[]      @relation("ReportedStrayReports")
+  assignedReports      StrayAnimalReport[]      @relation("AssignedFieldAgent")
+  notifications        Notification[]
+  adoptionApplications AdoptionApplication[]
+  assignedAdoptionInspections AdoptionApplication[] @relation("AssignedAdoptionInspector")
+  surrenderRequests    AnimalSurrenderRequest[]
+}
+
+model StrayAnimalReport {
+  reporterName     String                   @default("Anonymous")
+  id               String                   @id @default(cuid())
+  animalType       String
+  condition        String?
+  location         String
+  latitude         Float?
+  longitude        Float?
+  description      String
+  imageUrl         String?
+  status           String                   @default("OPEN")
+  fieldStatus      String                   @default("UNASSIGNED")
+  fieldNotes       String?
+  fieldOutcome     String?
+  reporterId       String?
+  reporter         User?                    @relation("ReportedStrayReports", fields: [reporterId], references: [id], onDelete: SetNull)
+  assignedAgentId  String?
+  assignedAgent    User?                    @relation("AssignedFieldAgent", fields: [assignedAgentId], references: [id], onDelete: SetNull)
+  assignedAt       DateTime?
+  acceptedAt       DateTime?
+  rejectedAt       DateTime?
+  dispatchedAt     DateTime?
+  onSceneAt        DateTime?
+  rescueStartedAt  DateTime?
+  unableToLocateAt DateTime?
+  failedAt         DateTime?
+  resolvedAt       DateTime?
+  notifications    Notification[]
+  images           StrayAnimalReportImage[]
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+
+  @@index([reporterId])
+  @@index([assignedAgentId])
+  @@index([fieldStatus])
+  @@index([status])
+}
+
+model Notification {
+  id          String             @id @default(cuid())
+  recipientId String
+  recipient   User               @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  reportId    String?
+  report      StrayAnimalReport? @relation(fields: [reportId], references: [id], onDelete: SetNull)
+  type        String
+  title       String
+  body        String
+  readAt      DateTime?
+  createdAt   DateTime           @default(now())
+
+  @@index([recipientId, readAt])
+  @@index([reportId])
+}
+
+model StrayAnimalReportImage {
+  id        String            @id @default(cuid())
+  reportId  String
+  report    StrayAnimalReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  dataUri   String
+  mimeType  String
+  fileName  String?
+  sortOrder Int               @default(0)
+  createdAt DateTime          @default(now())
+
+  @@index([reportId])
+}
+
+model ShelterAnimal {
+  id               String                  @id
+  name             String
+  type             String
+  age              String
+  sex              String
+  breed            String
+  size             String
+  energy           String
+  bestFor          String
+  location         String
+  vaccinated       Boolean                 @default(false)
+  personalityJson  String
+  story            String
+  imageDataUri     String
+  imageMimeType    String
+  status           String                  @default("AVAILABLE")
+  images           ShelterAnimalImage[]
+  applications     AdoptionApplication[]
+  surrenderRequest AnimalSurrenderRequest?
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  @@index([status])
+  @@index([type])
+}
+
+model ShelterAnimalImage {
+  id        String        @id @default(cuid())
+  animalId  String
+  animal    ShelterAnimal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  dataUri   String
+  mimeType  String
+  fileName  String?
+  sortOrder Int           @default(0)
+  createdAt DateTime      @default(now())
+
+  @@index([animalId])
+}
+
+model AdoptionApplication {
+  id                 String        @id @default(cuid())
+  animalId           String
+  animal             ShelterAnimal @relation(fields: [animalId], references: [id], onDelete: Restrict)
+  applicantId        String?
+  applicant          User?         @relation(fields: [applicantId], references: [id], onDelete: SetNull)
+  applicantName      String
+  email              String
+  phone              String
+  address            String
+  housingType        String
+  hasYard            Boolean       @default(false)
+  hasOtherPets       Boolean       @default(false)
+  otherPetsDetails   String?
+  experience         String?
+  reason             String
+  schedule           String?
+  householdAgreement Boolean       @default(false)
+  status             String        @default("SUBMITTED")
+  assignedAgentId    String?
+  assignedAgent      User?         @relation("AssignedAdoptionInspector", fields: [assignedAgentId], references: [id], onDelete: SetNull)
+  inspectionAssignedAt DateTime?
+  inspectionCompletedAt DateTime?
+  inspectionRecommendation String?
+  inspectionPropertySafe Boolean?
+  inspectionSecureYard Boolean?
+  inspectionPetsCompatible Boolean?
+  inspectionNotes    String?
+  pickupScheduledAt  DateTime?
+  pickupNote         String?
+  adoptedAt          DateTime?
+  documents          AdoptionApplicationDocument[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  @@index([animalId])
+  @@index([applicantId])
+  @@index([status])
+  @@index([assignedAgentId])
+}
+
+model AdoptionApplicationDocument {
+  id            String              @id @default(cuid())
+  applicationId String
+  application   AdoptionApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  documentType  String
+  dataUri       String
+  mimeType      String
+  fileName      String
+  sizeBytes     Int
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@unique([applicationId, documentType])
+  @@index([applicationId])
+}
+
+model AnimalSurrenderRequest {
+  id                     String                 @id @default(cuid())
+  isAnonymous            Boolean                @default(false)
+  ownerId                String?
+  owner                  User?                  @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  ownerName              String
+  email                  String
+  phone                  String
+  address                String
+  preferredContactMethod String                 @default("Phone")
+  animalName             String?
+  animalType             String
+  breed                  String?
+  age                    String?
+  sex                    String?
+  color                  String?
+  vaccinated             Boolean                @default(false)
+  sterilized             Boolean                @default(false)
+  microchipped           Boolean                @default(false)
+  healthNotes            String?
+  behaviorNotes          String?
+  reason                 String
+  urgency                String
+  scheduledIntakeAt      DateTime?
+  scheduledIntakeNote    String?
+  completedAt            DateTime?
+  shelterAnimalId        String?                @unique
+  shelterAnimal          ShelterAnimal?         @relation(fields: [shelterAnimalId], references: [id], onDelete: SetNull)
+  status                 String                 @default("SUBMITTED")
+  images                 AnimalSurrenderImage[]
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([animalType])
+}
+
+model AnimalSurrenderImage {
+  id          String                 @id @default(cuid())
+  surrenderId String
+  surrender   AnimalSurrenderRequest @relation(fields: [surrenderId], references: [id], onDelete: Cascade)
+  dataUri     String
+  mimeType    String
+  fileName    String?
+  sortOrder   Int                    @default(0)
+  createdAt   DateTime               @default(now())
+
+  @@index([surrenderId])
+}

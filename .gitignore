@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build files
+dist/
+build/
+/src/generated/prisma
+
+# Local databases and runtime output
+*.db
+*.sqlite
+*.sqlite3
+*.log
+/Database/dev.pre-*.db
+/powerbi-data/*.csv
+/powerbi-data/export-summary.json
+
+# Local tooling
+.codex-*.log
+.vscode/
+.idea/

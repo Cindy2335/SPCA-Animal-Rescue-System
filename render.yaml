@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: team08-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run db:generate && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: AUTH_TOKEN_SECRET
+        generateValue: true
+      - key: GA4_PROPERTY_ID
+        value: "551275142"
+      - key: GA4_DEMO_DATA
+        value: "true"
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        value: /etc/secrets/typ-ga4-dashboard-key.json
